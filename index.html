@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>App</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="icon" type="image/x-icon" href="images/favicon.ico">
+        <link rel="stylesheet" type="text/css" href="css/buttons-grid.css">
+        <link rel="stylesheet" type="text/css" href="css/style.css">
+        <script defer type="text/javascript" src="code/app.js"></script>
+        <script defer type="text/javascript" src="code/resizechecker.js"></script>
+    </head>
+    <body>
+        <div id="calculator">
+            <input type="text" id="display" readonly>
+            <button class="basic operator" id="add" onclick="AddToDisplay('+')" >+</button>
+            <button class="basic operator" id="min" onclick="AddToDisplay('-')" >−</button>
+            <button class="basic operator" id="tim" onclick="AddToDisplay('*')" >×</button>
+            <button class="basic operator" id="div" onclick="AddToDisplay('/')" >÷</button>
+            <button class="basic normal" id="seven" onclick="AddToDisplay('7')" >7</button>
+            <button class="basic normal" id="eight" onclick="AddToDisplay('8')" >8</button>
+            <button class="basic normal" id="nine" onclick="AddToDisplay('9')" >9</button>
+            <button class="basic normal" id="four" onclick="AddToDisplay('4')" >4</button>
+            <button class="basic normal" id="five" onclick="AddToDisplay('5')" >5</button>
+            <button class="basic normal" id="six" onclick="AddToDisplay('6')" >6</button>
+            <button class="basic normal" id="one" onclick="AddToDisplay('1')" >1</button>
+            <button class="basic normal" id="two" onclick="AddToDisplay('2')" >2</button>
+            <button class="basic normal" id="three" onclick="AddToDisplay('3')" >3</button>
+            <button class="basic normal" id="zero" onclick="AddToDisplay('0')" >0</button>
+            <button class="basic normal" id="decimal" onclick="AddToDisplay('.')" >.</button>
+            <button class="basic clear" id="clear" onclick="DeleteDisplay('C')" >C</button>
+            <button class="basic eval" id="equal" onclick="EvaluateDisplay('=')" >=</button>
+        </div>
+        <p id="creator">Made by Idlekahbo</p>
+    </body>
+</html>

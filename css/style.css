@@ -1,0 +1,130 @@
+@font-face {
+	font-family: 'BakeSoda';
+	src: url('../fonts/BakeSoda.woff') format('woff');
+}
+
+@font-face {
+	font-family: 'Coolvetica';
+	src: url('../fonts/Coolvetica.woff') format('woff');
+}
+
+body {
+	background-color: #387D7A;
+	overflow-y: hidden; /* Disable vertical scrolling */
+}
+
+button {
+	font-family: "Coolvetica";
+}
+
+input {
+	font-family: "Coolvetica";
+}
+
+#creator {
+    color: #FFFFFF;
+    position: absolute;
+    bottom: calc(-1.7vw); /* Scales with viewport width */
+    right: calc(0.3vw); /* Scales with viewport width */
+    font-size: calc(1.5vw); /* Font size scales with viewport width */
+    font-family: "BakeSoda";
+}
+
+
+#calculator {
+	/*!Centers Calculator to the middle of the screen. DO NOT CHANGE*/
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	margin: auto;
+	/**Setting ratio proportions*/
+	width: 67px;
+	height: 101px;
+	/**Colour & Style*/
+	background-color: #102535;
+	padding: 3px;
+	border-radius: 2px;
+}
+
+#display {
+	/**Same as .basic but doesn't center text to the middle*/
+	/**Border*/
+	border-radius: 5px;
+	border-width: 0px;
+	border-color: #FFFFFF;
+	border-style: solid;
+	/**Text*/
+	color: #FFFFFF;
+	text-align: right;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	font-size: 10px;
+	/**Background*/
+	background-color: #1F3B45;
+	/**Correct Scrolling*/
+	direction: rtl;
+	/**Prevents Clicking and selecting boxes*/
+	pointer-events: none;
+	overflow: hidden;
+}
+
+.basic {
+	/**sets the size of the normal 1x1 buttons. Eg numpad excluding zero*/
+	/**Border*/
+	border-radius: 5px;
+	border-width: 0px;
+	border-color: #FFFFFF;
+	border-style: solid;
+	/**Text*/
+	color: #FFFFFF;
+	text-align: center;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	font-size: 10px;
+}
+
+.normal {
+	background-color: #1F3B45;
+}
+.normal:hover {
+	background-color: #18353f;
+}
+.normal:active {
+	background-color: #1b333b;
+}
+
+.operator {
+	background-color: #F5B700;
+	font-size: 12px;
+}
+.operator:hover {
+	background-color: #dba400;
+}
+.operator:active {
+	background-color: #c29100;
+}
+
+.clear {
+	background-color: #A72608;
+}
+.clear:hover {
+	background-color: #962207;
+}
+.clear:active {
+	background-color: #7e1d07;
+}
+
+.eval {
+	background-color: #379634;
+	font-size: 16px;
+}
+.eval:hover {
+	background-color: #288125;
+}
+.eval:active {
+	background-color: #1c6e1a;
+}
