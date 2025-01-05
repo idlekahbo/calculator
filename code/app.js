@@ -4,117 +4,6 @@ var iserror = false;
 var finished_calculation = false;
 var display_value = "";
 
-function Calculate(expression) {
-    expression = expression.replace(/\s+/g, ""); // Remove spaces
-
-    // Function to handle precedence of operations
-    function precedence(op) {
-        if (op === "+" || op === "-") return 1;
-        if (op === "*" || op === "/") return 2;
-        return 0;
-    }
-
-    // Function to perform the calculation for a specific operator
-    function applyOperation(a, b, operator) {
-        switch (operator) {
-            case "+":
-                return a + b;
-            case "-":
-                return a - b;
-            case "*":
-                return a * b;
-            case "/":
-                if (b === 0) return NaN; // Division by zero is not allowed
-                return a / b;
-            default:
-                return NaN; // Invalid operator
-        }
-    }
-
-    // Function to evaluate the expression
-    function evaluateExpression(expr) {
-        const values = [];  // Stack to store values (numbers)
-        const ops = [];     // Stack to store operators
-        let i = 0;
-
-        while (i < expr.length) {
-            if (expr[i] === "(") {
-                let start = i;
-                let openCount = 1;
-                i++;
-                while (openCount !== 0) {
-                    if (expr[i] === "(") openCount++;
-                    if (expr[i] === ")") openCount--;
-                    i++;
-                }
-                values.push(evaluateExpression(expr.slice(start + 1, i - 1))); // Recursively evaluate the inside of parentheses
-            } else if (/\d/.test(expr[i])) {
-                let num = "";
-                while (i < expr.length && /\d|\./.test(expr[i])) {
-                    num += expr[i++];
-                }
-                values.push(parseFloat(num)); // Convert the number string to a float and push onto the values stack
-            } else if (expr[i] === "+" || expr[i] === "-") {
-                // Handle unary + or - (negative numbers or positive numbers)
-                if (i === 0 || expr[i - 1] === "(" || ["+", "-", "*", "/", "^"].includes(expr[i - 1])) {
-                    // It's a unary operator, not a binary operator
-                    let num = "";
-                    i++; // Skip the unary sign
-                    while (i < expr.length && /\d|\./.test(expr[i])) {
-                        num += expr[i++];
-                    }
-                    values.push(parseFloat(expr[i - num.length - 1] + num)); // Handle negative sign
-                } else {
-                    // Regular binary operator
-                    while (
-                        ops.length > 0 &&
-                        precedence(ops[ops.length - 1]) >= precedence(expr[i])
-                    ) {
-                        const op = ops.pop();
-                        const b = values.pop();
-                        const a = values.pop();
-                        values.push(applyOperation(a, b, op)); // Apply the previous operator with values
-                    }
-                    ops.push(expr[i]); // Push the current operator onto the operator stack
-                    i++;
-                }
-            } else if (/[+\-*/]/.test(expr[i])) {
-                // For other operators: +, -, *, /
-                while (
-                    ops.length > 0 &&
-                    precedence(ops[ops.length - 1]) >= precedence(expr[i])
-                ) {
-                    const op = ops.pop();
-                    const b = values.pop();
-                    const a = values.pop();
-                    values.push(applyOperation(a, b, op)); // Apply the operator with the values
-                }
-                ops.push(expr[i]); // Push the current operator onto the operator stack
-                i++;
-            } else {
-                // If we encounter any invalid characters, return NaN
-                return NaN;
-            }
-        }
-
-        // Apply the remaining operators in the stack
-        while (ops.length > 0) {
-            const op = ops.pop();
-            const b = values.pop();
-            const a = values.pop();
-            values.push(applyOperation(a, b, op)); // Apply the last operator with the remaining values
-        }
-
-        return values[0]; // The result is the last remaining value in the values stack
-    }
-
-    try {
-        return evaluateExpression(expression);
-    } catch (error) {
-        return NaN; // Return NaN for any unexpected error
-    }
-}
-
 function formatNumber(num) {
     // Step 1: Convert the number to a string with a reasonable precision
     let numStr = Number(num).toFixed(15); // Use 15 decimal places for safety
@@ -164,6 +53,13 @@ function AddToDisplay(value) {
         //* \/ checks to see if there has been a recent calculation and if there has and there is an operator input, add to the answer of the previous calculation else: return back to normal
     } else if (["+", "-", "*", "/"].includes(value) && finished_calculation == true) {
         finished_calculation = false;
+        //* Checks if the user presses . and if they have put 0. because (nothing) . is gonna make an error
+    } else if (value == ".") {
+        calculation = "0.";
+        display_value = "0.";
+        display.value = "‪" + display_value + "‬";
+        finished_calculation = false;
+        return;
     } else if (finished_calculation == true) {
         finished_calculation = false;
         calculation = ""
@@ -184,24 +80,34 @@ function DeleteDisplay() {
 function EvaluateDisplay() {
     // (!calculation == "") checks to see if baically they have pressed = without an equation and if so just do nothing
     if (!calculation == "") {
-        // calculates the equation
-        calculation = Calculate(calculation);
+        //* Captures the input for QWERTY
+        var input = calculation;
+        try {
+            // calculates the equation
+            calculation = window.math.evaluate(calculation);
         // Checks to see for an error in the calculation if so just say Error and end
-        if (isNaN(calculation)) {
+        } catch (error) {
             iserror = true;
             display.value = "‪" + "Error" + "‬";
             return;
         }
+
         // checks for a large numbers and formats it to a more readable number
         calculation = formatNumber(calculation)
         // checks to see if the number is to big and if so just say Error and end
         if (isNaN(calculation)) {
             iserror = true;
-            display.value = "‪" + "To Long" + "‬";
+            display.value = "‪" + "Too Long" + "‬";
             return;
         }
     }
-    finished_calculation = true;
+    //* QWERTY basically if the input is the same as the calculation then do nothing
+    if (calculation != input) {
+        finished_calculation = true;
+    } else {
+        calculation = input;
+    }
     display_value = calculation;
     display.value = "‪" + display_value + "‬";
+
 }
