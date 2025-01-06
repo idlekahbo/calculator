@@ -3,6 +3,7 @@ var calculation = "";
 var iserror = false;
 var finished_calculation = false;
 var display_value = "";
+var item =""
 
 function formatNumber(num) {
     // Step 1: Convert the number to a string with a reasonable precision
@@ -53,21 +54,28 @@ function AddToDisplay(value) {
         //* \/ checks to see if there has been a recent calculation and if there has and there is an operator input, add to the answer of the previous calculation else: return back to normal
     } else if (["+", "-", "*", "/"].includes(value) && finished_calculation == true) {
         finished_calculation = false;
-        //* Checks if the user presses . and if they have put 0. because (nothing) . is gonna make an error
-    } else if (value == ".") {
-        calculation = "0.";
-        display_value = "0.";
-        display.value = "‪" + display_value + "‬";
-        finished_calculation = false;
-        return;
     } else if (finished_calculation == true) {
         finished_calculation = false;
         calculation = ""
         DeleteDisplay();
     }
-    calculation = calculation + value;
-    display_value += value.replace("/", "÷").replace("*", "×").replace("-", "−");
+    //* Checking for bullet point casses and behavoiur
+    if (value == ".") {
+        if (["1", "2", "3", "4", "5", "6", "7", "8", "9"].includes(calculation.charAt(calculation.length - 1))) {
+            item = ".";
+        } else {
+            item = "0.";
+            finished_calculation = false;
+        }
+        //* Checks
+    } else {
+        item = value;
+    }
+
+    calculation = calculation + item;
+    display_value += item.replace("/", "÷").replace("*", "×").replace("-", "−");
     display.value = "‪" + display_value + "‬";
+    item = "";
 }
 
 //* Deletes screen
@@ -107,7 +115,12 @@ function EvaluateDisplay() {
     } else {
         calculation = input;
     }
-    display_value = calculation;
+    calculation = calculation.toString();
+    let store = "";
+    for (let i = 0; i < calculation.length; i++) {
+        store += calculation.charAt(i).replace("/", "÷").replace("*", "×").replace("-", "−");
+    }
+    display_value = store;
     display.value = "‪" + display_value + "‬";
 
 }
