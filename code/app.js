@@ -1,7 +1,53 @@
+let finished_calculation = false;  // Ensure this is declared
+
+document.addEventListener("keydown", function(event) {
+    const keyMap = {
+        "Numpad0": "0", "Digit0": "0",
+        "Numpad1": "1", "Digit1": "1",
+        "Numpad2": "2", "Digit2": "2",
+        "Numpad3": "3", "Digit3": "3",
+        "Numpad4": "4", "Digit4": "4",
+        "Numpad5": "5", "Digit5": "5",
+        "Numpad6": "6", "Digit6": "6",
+        "Numpad7": "7", "Digit7": "7",
+        "Numpad8": "8", "Digit8": "8",
+        "Numpad9": "9", "Digit9": "9",
+        "NumpadAdd": "+", "Equal": "+",
+        "NumpadSubtract": "-",
+        "NumpadMultiply": "*",
+        "NumpadDivide": "/",
+        "NumpadDecimal": ".", "Period": ".",
+        "Equal": "=",
+        "NumpadEnter": "Enter", "Enter": "Enter"
+    };
+
+    console.log("Key pressed:", event.code);  // Debugging
+
+    if (event.code in keyMap) {
+        if (keyMap[event.code] === "Enter" || keyMap[event.code] === "=") {
+            if (finished_calculation && keyMap[event.code] === "Enter") {
+                finished_calculation = false;
+                calculation = "";
+                DeleteDisplay();
+            } else {
+                EvaluateDisplay();
+                finished_calculation = true;  // Set this after evaluating
+            }
+        } else {
+            if (finished_calculation) { 
+                // Reset display if typing after finishing a calculation
+                finished_calculation = false;
+                DeleteDisplay();
+            }
+            AddToDisplay(keyMap[event.code]);
+        }
+        event.preventDefault();
+    }
+});
+
 var display = document.getElementById("display");
 var calculation = "";
 var iserror = false;
-var finished_calculation = false;
 var display_value = "";
 var item =""
 
@@ -59,10 +105,15 @@ function AddToDisplay(value) {
         calculation = ""
         DeleteDisplay();
     }
-    //* Checking for bullet point casses and behavoiur
+    if (calculation.charAt(calculation.length - 1) == "." && ["+", "-", "*", "/"].includes(value)) {
+        return;
+    }
+    //* Checking for bullet point cases and behavoiur
     if (value == ".") {
         if (["1", "2", "3", "4", "5", "6", "7", "8", "9"].includes(calculation.charAt(calculation.length - 1))) {
             item = ".";
+        } else if (["+", "-", "*", "/", "."].includes(calculation.charAt(calculation.length - 1))) {
+            return;
         } else {
             item = "0.";
             finished_calculation = false;
